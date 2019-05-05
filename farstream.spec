@@ -6,16 +6,16 @@
 #
 Name     : farstream
 Version  : 0.2.8
-Release  : 4
+Release  : 5
 URL      : https://freedesktop.org/software/farstream/releases/farstream/farstream-0.2.8.tar.gz
 Source0  : https://freedesktop.org/software/farstream/releases/farstream/farstream-0.2.8.tar.gz
 Source99 : https://freedesktop.org/software/farstream/releases/farstream/farstream-0.2.8.tar.gz.asc
-Summary  : Farstream base classes and utilities
+Summary  : Farstream (formerly Farsight) - Audio/Video Communications Framework
 Group    : Development/Tools
 License  : LGPL-2.1
-Requires: farstream-lib
-Requires: farstream-data
-Requires: farstream-doc
+Requires: farstream-data = %{version}-%{release}
+Requires: farstream-lib = %{version}-%{release}
+Requires: farstream-license = %{version}-%{release}
 BuildRequires : docbook-xml
 BuildRequires : glibc-bin
 BuildRequires : gobject-introspection-dev
@@ -26,6 +26,7 @@ BuildRequires : pkgconfig(gio-unix-2.0)
 BuildRequires : pkgconfig(gstreamer-1.0)
 BuildRequires : pkgconfig(gstreamer-plugins-base-1.0)
 BuildRequires : pkgconfig(nice)
+BuildRequires : python-core
 BuildRequires : valgrind
 
 %description
@@ -47,9 +48,10 @@ data components for the farstream package.
 %package dev
 Summary: dev components for the farstream package.
 Group: Development
-Requires: farstream-lib
-Requires: farstream-data
-Provides: farstream-devel
+Requires: farstream-lib = %{version}-%{release}
+Requires: farstream-data = %{version}-%{release}
+Provides: farstream-devel = %{version}-%{release}
+Requires: farstream = %{version}-%{release}
 
 %description dev
 dev components for the farstream package.
@@ -66,10 +68,19 @@ doc components for the farstream package.
 %package lib
 Summary: lib components for the farstream package.
 Group: Libraries
-Requires: farstream-data
+Requires: farstream-data = %{version}-%{release}
+Requires: farstream-license = %{version}-%{release}
 
 %description lib
 lib components for the farstream package.
+
+
+%package license
+Summary: license components for the farstream package.
+Group: Default
+
+%description license
+license components for the farstream package.
 
 
 %prep
@@ -80,9 +91,16 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1511983092
+export SOURCE_DATE_EPOCH=1557084760
+export AR=gcc-ar
+export RANLIB=gcc-ranlib
+export NM=gcc-nm
+export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FCFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
+export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
 %configure --disable-static
-make V=1  %{?_smp_mflags}
+make  %{?_smp_mflags}
 
 %check
 export LANG=C
@@ -92,8 +110,10 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1511983092
+export SOURCE_DATE_EPOCH=1557084760
 rm -rf %{buildroot}
+mkdir -p %{buildroot}/usr/share/package-licenses/farstream
+cp COPYING %{buildroot}/usr/share/package-licenses/farstream/COPYING
 %make_install
 
 %files
@@ -126,7 +146,7 @@ rm -rf %{buildroot}
 /usr/lib64/pkgconfig/farstream-0.2.pc
 
 %files doc
-%defattr(-,root,root,-)
+%defattr(0644,root,root,0755)
 /usr/share/gtk-doc/html/farstream-libs-0.2/FsConference.html
 /usr/share/gtk-doc/html/farstream-libs-0.2/FsElementAddedNotifier.html
 /usr/share/gtk-doc/html/farstream-libs-0.2/FsParticipant.html
@@ -209,3 +229,7 @@ rm -rf %{buildroot}
 /usr/lib64/gstreamer-1.0/libfsvideoanyrate.so
 /usr/lib64/libfarstream-0.2.so.5
 /usr/lib64/libfarstream-0.2.so.5.1.0
+
+%files license
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/farstream/COPYING
