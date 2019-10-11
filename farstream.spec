@@ -6,28 +6,35 @@
 #
 Name     : farstream
 Version  : 0.2.8
-Release  : 5
+Release  : 7
 URL      : https://freedesktop.org/software/farstream/releases/farstream/farstream-0.2.8.tar.gz
 Source0  : https://freedesktop.org/software/farstream/releases/farstream/farstream-0.2.8.tar.gz
-Source99 : https://freedesktop.org/software/farstream/releases/farstream/farstream-0.2.8.tar.gz.asc
-Summary  : Farstream (formerly Farsight) - Audio/Video Communications Framework
+Source1 : https://freedesktop.org/software/farstream/releases/farstream/farstream-0.2.8.tar.gz.asc
+Summary  : Farstream base classes and utilities
 Group    : Development/Tools
 License  : LGPL-2.1
 Requires: farstream-data = %{version}-%{release}
 Requires: farstream-lib = %{version}-%{release}
 Requires: farstream-license = %{version}-%{release}
+BuildRequires : automake
+BuildRequires : automake-dev
 BuildRequires : docbook-xml
+BuildRequires : gettext-bin
 BuildRequires : glibc-bin
 BuildRequires : gobject-introspection-dev
 BuildRequires : gtk-doc
 BuildRequires : gtk-doc-dev
+BuildRequires : libtool
+BuildRequires : libtool-dev
 BuildRequires : libxslt-bin
+BuildRequires : m4
+BuildRequires : pkg-config-dev
 BuildRequires : pkgconfig(gio-unix-2.0)
 BuildRequires : pkgconfig(gstreamer-1.0)
 BuildRequires : pkgconfig(gstreamer-plugins-base-1.0)
 BuildRequires : pkgconfig(nice)
-BuildRequires : python-core
 BuildRequires : valgrind
+Patch1: 0001-Remove-Python-dependency.patch
 
 %description
 Farstream
@@ -85,13 +92,15 @@ license components for the farstream package.
 
 %prep
 %setup -q -n farstream-0.2.8
+%patch1 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1557084760
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1570833325
+export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
@@ -99,21 +108,21 @@ export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
 export FCFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
 export FFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
 export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
-%configure --disable-static
+%reconfigure --disable-static
 make  %{?_smp_mflags}
 
 %check
-export LANG=C
+export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1557084760
+export SOURCE_DATE_EPOCH=1570833325
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/farstream
-cp COPYING %{buildroot}/usr/share/package-licenses/farstream/COPYING
+cp %{_builddir}/farstream-0.2.8/COPYING %{buildroot}/usr/share/package-licenses/farstream/caeb68c46fa36651acf592771d09de7937926bb3
 %make_install
 
 %files
@@ -232,4 +241,4 @@ cp COPYING %{buildroot}/usr/share/package-licenses/farstream/COPYING
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/farstream/COPYING
+/usr/share/package-licenses/farstream/caeb68c46fa36651acf592771d09de7937926bb3
