@@ -5,36 +5,29 @@
 # Source0 file verified with key 0x1D388E5A4ED9A2BB (tester@tester.ca)
 #
 Name     : farstream
-Version  : 0.2.8
-Release  : 7
-URL      : https://freedesktop.org/software/farstream/releases/farstream/farstream-0.2.8.tar.gz
-Source0  : https://freedesktop.org/software/farstream/releases/farstream/farstream-0.2.8.tar.gz
-Source1 : https://freedesktop.org/software/farstream/releases/farstream/farstream-0.2.8.tar.gz.asc
+Version  : 0.2.9
+Release  : 8
+URL      : https://freedesktop.org/software/farstream/releases/farstream/farstream-0.2.9.tar.gz
+Source0  : https://freedesktop.org/software/farstream/releases/farstream/farstream-0.2.9.tar.gz
+Source1  : https://freedesktop.org/software/farstream/releases/farstream/farstream-0.2.9.tar.gz.asc
 Summary  : Farstream base classes and utilities
 Group    : Development/Tools
 License  : LGPL-2.1
 Requires: farstream-data = %{version}-%{release}
 Requires: farstream-lib = %{version}-%{release}
 Requires: farstream-license = %{version}-%{release}
-BuildRequires : automake
-BuildRequires : automake-dev
 BuildRequires : docbook-xml
-BuildRequires : gettext-bin
 BuildRequires : glibc-bin
 BuildRequires : gobject-introspection-dev
 BuildRequires : gtk-doc
 BuildRequires : gtk-doc-dev
-BuildRequires : libtool
-BuildRequires : libtool-dev
 BuildRequires : libxslt-bin
-BuildRequires : m4
-BuildRequires : pkg-config-dev
 BuildRequires : pkgconfig(gio-unix-2.0)
 BuildRequires : pkgconfig(gstreamer-1.0)
 BuildRequires : pkgconfig(gstreamer-plugins-base-1.0)
 BuildRequires : pkgconfig(nice)
 BuildRequires : valgrind
-Patch1: 0001-Remove-Python-dependency.patch
+Patch1: build-Adapt-to-backwards-incompatible-change-in-GNU.patch
 
 %description
 Farstream
@@ -91,7 +84,8 @@ license components for the farstream package.
 
 
 %prep
-%setup -q -n farstream-0.2.8
+%setup -q -n farstream-0.2.9
+cd %{_builddir}/farstream-0.2.9
 %patch1 -p1
 
 %build
@@ -99,14 +93,14 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1570833325
+export SOURCE_DATE_EPOCH=1586193409
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
 export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FCFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
 export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
 %reconfigure --disable-static
 make  %{?_smp_mflags}
@@ -119,10 +113,10 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1570833325
+export SOURCE_DATE_EPOCH=1586193409
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/farstream
-cp %{_builddir}/farstream-0.2.8/COPYING %{buildroot}/usr/share/package-licenses/farstream/caeb68c46fa36651acf592771d09de7937926bb3
+cp %{_builddir}/farstream-0.2.9/COPYING %{buildroot}/usr/share/package-licenses/farstream/caeb68c46fa36651acf592771d09de7937926bb3
 %make_install
 
 %files
@@ -176,7 +170,6 @@ cp %{_builddir}/farstream-0.2.8/COPYING %{buildroot}/usr/share/package-licenses/
 /usr/share/gtk-doc/html/farstream-libs-0.2/farstream-libs-Utility-functions.html
 /usr/share/gtk-doc/html/farstream-libs-0.2/home.png
 /usr/share/gtk-doc/html/farstream-libs-0.2/index.html
-/usr/share/gtk-doc/html/farstream-libs-0.2/index.sgml
 /usr/share/gtk-doc/html/farstream-libs-0.2/left-insensitive.png
 /usr/share/gtk-doc/html/farstream-libs-0.2/left.png
 /usr/share/gtk-doc/html/farstream-libs-0.2/pt01.html
@@ -186,9 +179,6 @@ cp %{_builddir}/farstream-0.2.8/COPYING %{buildroot}/usr/share/package-licenses/
 /usr/share/gtk-doc/html/farstream-libs-0.2/style.css
 /usr/share/gtk-doc/html/farstream-libs-0.2/up-insensitive.png
 /usr/share/gtk-doc/html/farstream-libs-0.2/up.png
-/usr/share/gtk-doc/html/farstream-plugins-0.2/FsMsnCamSendConference.html
-/usr/share/gtk-doc/html/farstream-plugins-0.2/FsMsnConference.html
-/usr/share/gtk-doc/html/farstream-plugins-0.2/FsMsnParticipant.html
 /usr/share/gtk-doc/html/farstream-plugins-0.2/FsRTPXdataDepay.html
 /usr/share/gtk-doc/html/farstream-plugins-0.2/FsRTPXdataPay.html
 /usr/share/gtk-doc/html/farstream-plugins-0.2/FsRawConference.html
@@ -199,11 +189,7 @@ cp %{_builddir}/farstream-0.2.8/COPYING %{buildroot}/usr/share/package-licenses/
 /usr/share/gtk-doc/html/farstream-plugins-0.2/FsVideoanyrate.html
 /usr/share/gtk-doc/html/farstream-plugins-0.2/ch01.html
 /usr/share/gtk-doc/html/farstream-plugins-0.2/ch02.html
-/usr/share/gtk-doc/html/farstream-plugins-0.2/ch03.html
 /usr/share/gtk-doc/html/farstream-plugins-0.2/farstream-plugins-0.2.devhelp2
-/usr/share/gtk-doc/html/farstream-plugins-0.2/farstream-plugins-FsMsnCamCamRecvConference.html
-/usr/share/gtk-doc/html/farstream-plugins-0.2/farstream-plugins-FsMsnSession.html
-/usr/share/gtk-doc/html/farstream-plugins-0.2/farstream-plugins-FsMsnStream.html
 /usr/share/gtk-doc/html/farstream-plugins-0.2/farstream-plugins-FsMulticastStreamTransmitter.html
 /usr/share/gtk-doc/html/farstream-plugins-0.2/farstream-plugins-FsNiceStreamTransmitter.html
 /usr/share/gtk-doc/html/farstream-plugins-0.2/farstream-plugins-FsRawParticipant.html
@@ -213,7 +199,6 @@ cp %{_builddir}/farstream-0.2.8/COPYING %{buildroot}/usr/share/package-licenses/
 /usr/share/gtk-doc/html/farstream-plugins-0.2/farstream-plugins-FsShmStreamTransmitter.html
 /usr/share/gtk-doc/html/farstream-plugins-0.2/home.png
 /usr/share/gtk-doc/html/farstream-plugins-0.2/index.html
-/usr/share/gtk-doc/html/farstream-plugins-0.2/index.sgml
 /usr/share/gtk-doc/html/farstream-plugins-0.2/left-insensitive.png
 /usr/share/gtk-doc/html/farstream-plugins-0.2/left.png
 /usr/share/gtk-doc/html/farstream-plugins-0.2/pt01.html
@@ -231,13 +216,12 @@ cp %{_builddir}/farstream-0.2.8/COPYING %{buildroot}/usr/share/package-licenses/
 /usr/lib64/farstream-0.2/libnice-transmitter.so
 /usr/lib64/farstream-0.2/librawudp-transmitter.so
 /usr/lib64/farstream-0.2/libshm-transmitter.so
-/usr/lib64/gstreamer-1.0/libfsmsnconference.so
 /usr/lib64/gstreamer-1.0/libfsrawconference.so
 /usr/lib64/gstreamer-1.0/libfsrtpconference.so
 /usr/lib64/gstreamer-1.0/libfsrtpxdata.so
 /usr/lib64/gstreamer-1.0/libfsvideoanyrate.so
 /usr/lib64/libfarstream-0.2.so.5
-/usr/lib64/libfarstream-0.2.so.5.1.0
+/usr/lib64/libfarstream-0.2.so.5.1.1
 
 %files license
 %defattr(0644,root,root,0755)
