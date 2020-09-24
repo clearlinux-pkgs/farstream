@@ -6,7 +6,7 @@
 #
 Name     : farstream
 Version  : 0.2.9
-Release  : 8
+Release  : 9
 URL      : https://freedesktop.org/software/farstream/releases/farstream/farstream-0.2.9.tar.gz
 Source0  : https://freedesktop.org/software/farstream/releases/farstream/farstream-0.2.9.tar.gz
 Source1  : https://freedesktop.org/software/farstream/releases/farstream/farstream-0.2.9.tar.gz.asc
