@@ -1,0 +1,23 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Patrick McCarty <patrick.mccarty@intel.com>
+Date: Sun, 22 Aug 2021 19:00:17 -0700
+Subject: [PATCH] Reduce test timeout
+
+Signed-off-by: Patrick McCarty <patrick.mccarty@intel.com>
+---
+ tests/check/Makefile.am | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/check/Makefile.am b/tests/check/Makefile.am
+index d50fc26..b44d55b 100644
+--- a/tests/check/Makefile.am
++++ b/tests/check/Makefile.am
+@@ -7,7 +7,7 @@ REGISTRY_ENVIRONMENT = \
+ 
+ TESTS_ENVIRONMENT = \
+ 	G_SLICE=debug-blocks					\
+-	CK_DEFAULT_TIMEOUT=120					\
++	CK_DEFAULT_TIMEOUT=4					\
+ 	STATE_IGNORE_ELEMENTS="$(STATE_IGNORE_ELEMENTS)"	\
+ 	$(REGISTRY_ENVIRONMENT)					\
+ 	GST_PLUGIN_LOADING_WHITELIST=gstreamer:gst-plugins-base:gst-plugins-good:libnice:valve:siren:autoconvert:rtpmux:dtmf:mimic:shm:spandsp:srtp:farstream@$(top_builddir)/gst \

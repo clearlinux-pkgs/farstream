@@ -1,4 +1,4 @@
-From 54987d445ea714b467d901b7daf8c09ed0644189 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Debarshi Ray <debarshir@freedesktop.org>
 Date: Thu, 12 Mar 2020 14:07:23 +0100
 Subject: [PATCH] build: Adapt to backwards incompatible change in GNU Make 4.3
@@ -20,7 +20,7 @@ https://gitlab.freedesktop.org/farstream/farstream/-/merge_requests/4
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/common-modified/gst-glib-gen.mak b/common-modified/gst-glib-gen.mak
-index 14f1ba37..2247a41c 100644
+index 14f1ba3..2247a41 100644
 --- a/common-modified/gst-glib-gen.mak
 +++ b/common-modified/gst-glib-gen.mak
 @@ -6,7 +6,8 @@
@@ -33,5 +33,3 @@ index 14f1ba37..2247a41c 100644
  
  # these are all the rules generating the relevant files
  $(glib_gen_basename)-enumtypes.h: $(glib_enum_headers)
--- 
-2.24.1

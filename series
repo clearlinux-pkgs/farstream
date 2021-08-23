@@ -1,1 +1,3 @@
-build-Adapt-to-backwards-incompatible-change-in-GNU.patch
+0001-build-Adapt-to-backwards-incompatible-change-in-GNU-.patch
+0002-Drop-volatile-qualifiers.patch
+0003-Reduce-test-timeout.patch

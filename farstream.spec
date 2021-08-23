@@ -6,7 +6,7 @@
 #
 Name     : farstream
 Version  : 0.2.9
-Release  : 9
+Release  : 10
 URL      : https://freedesktop.org/software/farstream/releases/farstream/farstream-0.2.9.tar.gz
 Source0  : https://freedesktop.org/software/farstream/releases/farstream/farstream-0.2.9.tar.gz
 Source1  : https://freedesktop.org/software/farstream/releases/farstream/farstream-0.2.9.tar.gz.asc
@@ -27,7 +27,9 @@ BuildRequires : pkgconfig(gstreamer-1.0)
 BuildRequires : pkgconfig(gstreamer-plugins-base-1.0)
 BuildRequires : pkgconfig(nice)
 BuildRequires : valgrind
-Patch1: build-Adapt-to-backwards-incompatible-change-in-GNU.patch
+Patch1: 0001-build-Adapt-to-backwards-incompatible-change-in-GNU-.patch
+Patch2: 0002-Drop-volatile-qualifiers.patch
+Patch3: 0003-Reduce-test-timeout.patch
 
 %description
 Farstream
@@ -87,21 +89,23 @@ license components for the farstream package.
 %setup -q -n farstream-0.2.9
 cd %{_builddir}/farstream-0.2.9
 %patch1 -p1
+%patch2 -p1
+%patch3 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1586193409
+export SOURCE_DATE_EPOCH=1629739404
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
-export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
-export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
+export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=auto "
+export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=auto "
+export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=auto "
+export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=auto "
 %reconfigure --disable-static
 make  %{?_smp_mflags}
 
@@ -110,10 +114,10 @@ export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-make VERBOSE=1 V=1 %{?_smp_mflags} check || :
+make %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1586193409
+export SOURCE_DATE_EPOCH=1629739404
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/farstream
 cp %{_builddir}/farstream-0.2.9/COPYING %{buildroot}/usr/share/package-licenses/farstream/caeb68c46fa36651acf592771d09de7937926bb3
